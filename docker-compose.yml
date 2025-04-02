@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  iota-supply-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - GIT_REVISION
+        - BUILD_DATE
+        - PROFILE=release
+    image: iota-supply-service:latest
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./output:/app/output
+    command: >
+      iota-supply-service
+      --log-level ${LOG_LEVEL}
+      --rest-api-address ${REST_API_SOCKET_ADDRESS}

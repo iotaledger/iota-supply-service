@@ -1,0 +1,19 @@
+[package]
+name = "iota-supply-service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.44"
+axum = "0.7.9"
+clap = { version = "4.5.21", features = ["derive", "env"] }
+http = "1.2.0"
+iota-sdk = { git = "https://github.com/iotaledger/iota.git" }
+serde = "1.0.215"
+thiserror = "2.0.3"
+tokio = { version = "1.43", features = ["rt-multi-thread", "signal"] }
+tokio-util = "0.7.13"
+tower-http = { version = "0.6.2", features = ["cors"] }
+tracing = { version = "0.1.41", features = ["attributes"] }
+tracing-subscriber = "0.3.19"
+url = "2.5.4"
