@@ -3,6 +3,7 @@
 
 use std::net::SocketAddr;
 
+use anyhow::{Context, Result};
 use axum::{Extension, Json, Router, http, response::IntoResponse, routing::get};
 use http::Method;
 use iota_sdk::{IotaClient, IotaClientBuilder};
@@ -10,7 +11,7 @@ use serde::Serialize;
 use tokio::task::JoinHandle;
 use tokio_util::sync::CancellationToken;
 use tower_http::cors::{Any, CorsLayer};
-use tracing::{error, info};
+use tracing::info;
 
 const NANOS_PER_IOTA: u64 = 1_000_000_000;
 
@@ -19,13 +20,13 @@ use crate::errors::ApiError;
 pub(crate) fn spawn_rest_server(
     socket_addr: SocketAddr,
     cancel_token: CancellationToken,
-) -> JoinHandle<()> {
+) -> JoinHandle<anyhow::Result<()>> {
     tokio::spawn(async move {
-        let app = build_app().await;
+        let app = build_app().await?;
 
         let listener = tokio::net::TcpListener::bind(socket_addr)
             .await
-            .expect("failed to bind to socket");
+            .context("failed to bind to socket")?;
 
         info!("Listening on: {}", socket_addr);
 
@@ -35,13 +36,14 @@ pub(crate) fn spawn_rest_server(
                 info!("Shutdown signal received.");
             })
             .await
-            .inspect_err(|e| error!("Server encountered an error: {e}"))
-            .ok();
+            .context("server failed")?;
+
+        Ok(())
     })
 }
 
-async fn build_app() -> Router {
-    let iota_client = IotaClientBuilder::default().build_mainnet().await.unwrap();
+async fn build_app() -> Result<Router> {
+    let iota_client = IotaClientBuilder::default().build_mainnet().await?;
 
     // Allow all origins (CORS policy) - This is safe because the API is public and
     // does not require authentication. CORS is a browser-enforced mechanism
@@ -53,12 +55,12 @@ async fn build_app() -> Router {
         .allow_methods(Method::GET)
         .allow_headers(Any);
 
-    Router::new()
+    Ok(Router::new()
         .route("/supply/circulating", get(circulating_supply))
         .route("/supply/total", get(total_supply))
         .layer(Extension(iota_client))
         .layer(cors)
-        .fallback(fallback)
+        .fallback(fallback))
 }
 
 async fn fallback() -> impl IntoResponse {

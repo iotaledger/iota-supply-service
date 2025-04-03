@@ -1,7 +1,15 @@
 # IOTA Supply REST API
 
-A simple application providing the circulating and total supply of IOTA tokens.
-Please note that a running fullnode instance is required for syncing the data.
+A lightweight REST service that exposes the circulating and total supply of IOTA tokens.
+By default, the server listens on port `4000`.
+
+**Available Endpoints:**
+
+`GET /supply/circulating`
+Returns the current circulating supply of IOTA tokens.
+
+`GET /supply/total`
+Returns the total supply of IOTA tokens.
 
 # Development
 
@@ -42,10 +50,4 @@ The application uses a pre-existing `.env` file for configuration. You can modif
 
 ```sh
 $ cargo run
-```
-
-### Run the tests
-
-```sh
-$ cargo test
 ```

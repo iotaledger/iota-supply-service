@@ -8,7 +8,7 @@ anyhow = "1.0.44"
 axum = "0.7.9"
 clap = { version = "4.5.21", features = ["derive", "env"] }
 http = "1.2.0"
-iota-sdk = { git = "https://github.com/iotaledger/iota.git" }
+iota-sdk = { git = "https://github.com/iotaledger/iota.git", rev = "ac6cd1851e9ab6da66c18f7e0ebd071362df23f2"}
 serde = "1.0.215"
 thiserror = "2.0.3"
 tokio = { version = "1.43", features = ["rt-multi-thread", "signal"] }

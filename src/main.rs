@@ -37,7 +37,7 @@ async fn main() -> anyhow::Result<()> {
     // Spawn the REST server
     spawn_rest_server(cli.rest_api_address, token)
         .await
-        .inspect_err(|e| error!("REST server terminated with error: {e}"))?;
+        .inspect_err(|e| error!("REST server terminated with error: {e}"))??;
 
     Ok(())
 }
