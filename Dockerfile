@@ -22,8 +22,8 @@ RUN mv target/$(if [ $PROFILE = "dev" ]; then echo "debug"; else echo "release";
 # Runtime Stage
 FROM debian:bullseye-slim AS runtime
 
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y libsqlite3-0 && rm -rf /var/lib/apt/lists/*
+# Install runtime dependencies, including CA certificates for HTTPS
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
