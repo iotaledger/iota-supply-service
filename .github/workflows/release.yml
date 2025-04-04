@@ -8,6 +8,7 @@ jobs:
   build-and-publish:
     name: Build and Push Docker Image to IOTA Registry
     runs-on: ubuntu-latest
+    environment: release
 
     steps:
       # Checkout the repository
