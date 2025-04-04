@@ -30,9 +30,9 @@ jobs:
       # Tag the Docker image for the registry
       - name: Tag Docker Image
         run: |
-          docker tag iota-supply-service:latest docker-registry.iota.org/iota-supply-service:${{ github.ref_name }}
+          docker tag iota-supply-service:latest iotaledger/iota-supply-service:${{ github.ref_name }}
 
       # Push the Docker image to the registry
       - name: Push Docker Image
         run: |
-          docker push docker-registry.iota.org/iota-supply-service:${{ github.ref_name }}
+          docker push iotaledger/iota-supply-service:${{ github.ref_name }}
